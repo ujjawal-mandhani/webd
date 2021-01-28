@@ -1,0 +1,18 @@
+
+*************************
+
+SELECT album.name,artist.name,album.genre,cs,gs 
+FROM album 
+INNER JOIN artist 
+ON album.artist_id=artist.artist_id
+INNER JOIN (SELECT album_id,AVG(score) as cs FROM users,rating WHERE users.user_id=rating.user_id AND user_type="critic" GROUP BY album_id) critic 
+ON album.album_id=critic.album_id
+INNER JOIN (SELECT album-id,AVG(score) as gs FROM users,rating WHERE users.user_id=rating.user_id AND user_type="gen" GROUP BY album_id) gen
+ON album.album_id=gen.album_id;
+
+
+
+SELECT users.user_name,rating.score,rating.review,users.profile_pic FROM critic_users,album INNER JOIN rating ON album.album_id=rating.album_id INNER JOIN users ON rating.user_id=users.user_id WHERE critic_users.user_id<>rating.user_id;
+
+(SELECT critic_users.publication,users.user_name,rating.score,rating.review,users.profile_pic FROM critic_users,album INNER JOIN rating ON album.album_id=rating.album_id INNER JOIN users ON rating.user_id=users.user_id WHERE users.user_id=critic_users.user_id);
+
